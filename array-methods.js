@@ -1,10 +1,11 @@
-var dataset = require('./dataset.json');
+// {bankBalances destructuring assignment so dont have to use dataset. all the time }
+let {bankBalances} = require('./dataset.json');
 /*
   create an array with accounts from bankBalances that are
   greater than 100000.00
   assign the resulting array to `hundredThousandairs`
 */
-let accounts = dataset.bankBalances.filter((current) => {
+let accounts = bankBalances.filter((current) => {
   return current.amount > 100000;
 });
 
@@ -23,7 +24,7 @@ let hundredThousandairs = accounts;
     }
   assign the resulting array to `roundedDollar`
 */
-let rounded = dataset.bankBalances.map((current) => {
+let rounded = bankBalances.map((current) => {
   return {
     amount: current.amount,
     state: current.state,
@@ -42,7 +43,7 @@ let roundedDollar = rounded;
     }
   assign the resulting array to `roundedDime`
 */
-let swapAmount = dataset.bankBalances.map((current) => {
+let swapAmount = bankBalances.map((current) => {
   return {
     amount: Math.round(current.amount*10)/10,
     state: current.state
@@ -52,11 +53,12 @@ let swapAmount = dataset.bankBalances.map((current) => {
 let roundedDime = swapAmount;
 
 //set sumOfBankBalances to the sum of all amounts in bankBalances
-let totalSum = dataset.bankBalances.reduce((prev, curr) => {
+let totalSum = bankBalances.reduce((prev, curr) => {
   return Math.round(prev*100)/100 + parseFloat(curr.amount);
 },0);
 
 let sumOfBankBalances = totalSum;
+
 
 /*
   set sumOfInterests to the sum of the 18.9% interest
@@ -70,10 +72,7 @@ let sumOfBankBalances = totalSum;
     Delaware
   the result should be rounded to the nearest cent
  */
-let a = 100;
-let b = .189;
-let result = a * b;
-let interestOfStates = dataset.bankBalances.
+let interestOfStates = bankBalances.
   filter((current) => {
     if(current.state === "WI"
       || current.state === "IL"
@@ -84,17 +83,12 @@ let interestOfStates = dataset.bankBalances.
     ) {
       return true;
       }
-  }).
-  reduce((prev, curr) => {
+  })
+  .reduce((prev, curr) => {
     return Math.round(prev*100)/100 + Math.round(curr.amount*.189 *100)/100;
   },0);
 
 let sumOfInterests = interestOfStates;
-
-
-
-
-
 
 
 /*
@@ -111,7 +105,17 @@ let sumOfInterests = interestOfStates;
     Delaware
   the result should be rounded to the nearest cent
  */
-var sumOfHighInterests = null;
+let tmp = bankBalances.filter((current) => {
+   return current.state !== "WI"
+      && current.state !== "IL"
+      && current.state !== "WY"
+      && current.state !== "OH"
+      && current.state !== "GA"
+      && current.state !== "DE"
+});
+
+console.log('tmp: ', tmp);
+let sumOfHighInterests = null;
 
 /*
   aggregate the sum of bankBalance amounts
