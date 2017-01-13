@@ -1,16 +1,21 @@
 var dataset = require('./dataset.json');
-
 /*
   create an array with accounts from bankBalances that are
   greater than 100000.00
   assign the resulting array to `hundredThousandairs`
 */
-var hundredThousandairs = null;
+let accounts = dataset.bankBalances.filter((current) => {
+  return current.amount > 100000;
+});
+
+let hundredThousandairs = accounts;
+
+
 
 /*
   set a new key for each object in bankBalances named `rounded`
   the value of this key will be the `amount` rounded to the nearest dollar
-  example 
+  example
     {
       "amount": "134758.44",
       "state": "HI",
@@ -18,22 +23,40 @@ var hundredThousandairs = null;
     }
   assign the resulting array to `roundedDollar`
 */
-var roundedDollar = null;
+let rounded = dataset.bankBalances.map((current) => {
+  return {
+    amount: current.amount,
+    state: current.state,
+    rounded: Math.round(current.amount)  }
+});
+
+let roundedDollar = rounded;
 
 /*
   set a the `amount` value for each object in bankBalances
   to the value of `amount` rounded to the nearest 10 cents
-  example 
+  example
     {
       "amount": 134758.4,
       "state": "HI"
     }
   assign the resulting array to `roundedDime`
 */
-var roundedDime = null;
+let swapAmount = dataset.bankBalances.map((current) => {
+  return {
+    amount: Math.round(current.amount*10)/10,
+    state: current.state
+  }
+});
 
-// set sumOfBankBalances to the sum of all amounts in bankBalances
-var sumOfBankBalances = null;
+let roundedDime = swapAmount;
+
+//set sumOfBankBalances to the sum of all amounts in bankBalances
+let totalSum = dataset.bankBalances.reduce((prev, curr) => {
+  return Math.round(prev*100)/100 + parseFloat(curr.amount);
+},0);
+
+let sumOfBankBalances = totalSum;
 
 /*
   set sumOfInterests to the sum of the 18.9% interest
@@ -47,7 +70,32 @@ var sumOfBankBalances = null;
     Delaware
   the result should be rounded to the nearest cent
  */
-var sumOfInterests = null;
+let a = 100;
+let b = .189;
+let result = a * b;
+let interestOfStates = dataset.bankBalances.
+  filter((current) => {
+    if(current.state === "WI"
+      || current.state === "IL"
+      || current.state === "WY"
+      || current.state === "OH"
+      || current.state === "GA"
+      || current.state === "DE"
+    ) {
+      return true;
+      }
+  }).
+  reduce((prev, curr) => {
+    return Math.round(prev*100)/100 + Math.round(curr.amount*.189 *100)/100;
+  },0);
+
+let sumOfInterests = interestOfStates;
+
+
+
+
+
+
 
 /*
   set sumOfHighInterests to the sum of the 18.9% interest
@@ -77,14 +125,14 @@ var stateSums = null;
 
 /*
   set lowerSumStates to an array containing
-  only the two letter state abbreviation of each state 
+  only the two letter state abbreviation of each state
   where the sum of amounts in the state is
     less than 1,000,000
  */
 var lowerSumStates = null;
 
 /*
-  set higherStateSums to be the sum of 
+  set higherStateSums to be the sum of
     all amounts of every state
     where the sum of amounts in the state is
       greater than 1,000,000
@@ -107,7 +155,7 @@ var areStatesInHigherStateSum = null;
 
 /*
   Stretch Goal && Final Boss
-  
+
   set anyStatesInHigherStateSum to be true if
     any of these states have a sum of account values
       greater than 2,550,000
