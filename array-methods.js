@@ -72,23 +72,29 @@ let sumOfBankBalances = totalSum;
     Delaware
   the result should be rounded to the nearest cent
  */
-let interestOfStates = bankBalances.
-  filter((current) => {
-    if(current.state === "WI"
-      || current.state === "IL"
-      || current.state === "WY"
-      || current.state === "OH"
-      || current.state === "GA"
-      || current.state === "DE"
-    ) {
+let sumOfInterests = bankBalances.filter(function(bank){
+  switch(bank.state){
+    case 'WI':
+    case 'IL':
+    case 'WY':
+    case 'OH':
+    case 'GA':
+    case 'DE':
       return true;
-      }
-  })
-  .reduce((prev, curr) => {
-    return Math.round(prev*100)/100 + Math.round(curr.amount*.189 *100)/100;
-  },0);
+    default:
+      return false;
+  }
+})
+.reduce(function(prev, bank){
+  var bankAmountWithInterest = (18.9 / 100) * parseFloat(bank.amount);
+  var fixBankAmount = Math.round(bankAmountWithInterest * 100) / 100;
+  var fixPrev = parseFloat(parseFloat(prev).toFixed(2));
 
-let sumOfInterests = interestOfStates;
+  return fixPrev + fixBankAmount;
+}, 0);
+
+console.log('sumOfInterests: ', sumOfInterests);
+
 
 
 /*
@@ -113,8 +119,6 @@ let tmp = bankBalances.filter((current) => {
       && current.state !== "GA"
       && current.state !== "DE"
 });
-
-console.log('tmp: ', tmp);
 let sumOfHighInterests = null;
 
 /*
